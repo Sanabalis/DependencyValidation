@@ -13,4 +13,8 @@ Supports:
 - - It validates both constructor injected dependencies and endpoint injected dependencies
 - Supports several different manual (explicit) checks
 
-Just open the Tests project and look at DependencyTests to see how to use it.
+
+DependencyValidator, FailedValidation and Severity are implementation of the Dependency validation. They are the classes you want to copy and use.
+Open the Tests project and look at DependencyTests to see how to use them.
+
+Another few interesting files are Program.cs and WeatherForecastControllers.
