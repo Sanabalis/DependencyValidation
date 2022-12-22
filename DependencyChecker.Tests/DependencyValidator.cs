@@ -91,7 +91,8 @@ public class DependencyValidator
 
         if (implementation is null)
         {
-            // If we have an instance or a factory then we consider this successfully resolved - even though it might not be true in case of implementation factory
+            // If we have an instance or a factory then we consider this successfully resolved - even though it might not be true in case of implementation 
+            // factory
             if (service.ImplementationInstance is not null || service.ImplementationFactory is not null)
                 return;
             
@@ -101,17 +102,19 @@ public class DependencyValidator
 
         var constructors = implementation.GetConstructors();
 
-        // Get the constructor with the ActivatorUtilitiesConstructor attribute, which is used by the DI to find the correct constructor in case of multiple constructors.
-        // For some reason, some of the Microsoft implementations have multiple constructors, mostly extended with ILogger<> parameter. I'm not sure how DI knows which one to use, but
-        // I assume it tries the one by one, starting with the one with most arguments, until it succeeds resolving all elements. I just grab the first one and consider it 
-        // good enough, but it might require better implementation in the future. 
+        // Get the constructor with the ActivatorUtilitiesConstructor attribute, which is used by the DI to find the correct constructor in case of multiple 
+        // constructors. For some reason, some of the Microsoft implementations have multiple constructors, mostly extended with ILogger<> parameter. I'm not 
+        // sure how DI knows which one to use, but I assume it tries the one by one, starting with the one with most arguments, until it succeeds resolving all 
+        // elements. 
+        // I just grab the first one and consider it good enough, but it might require better implementation in the future. 
         var constructor = constructors.SingleOrDefault(x =>
                 x?.GetCustomAttribute<ActivatorUtilitiesConstructorAttribute>() is not null,
             constructors.FirstOrDefault());
 
         if (constructor is null)
         {
-            FailedValidations.Add(new FailedValidation(Severity.Warning, serviceType, $"Service implementation {implementation.Name} does not have valid constructors."));
+            FailedValidations.Add(new FailedValidation(Severity.Warning, serviceType, 
+                $"Service implementation {implementation.Name} does not have valid constructors."));
             return;
         }
 
@@ -123,7 +126,8 @@ public class DependencyValidator
         }
     }
     
-    private void ValidateChildService(Type serviceType, ServiceLifetime parentLifetime, Type? explicitImplementationType = null, ServiceLifetime? explicitServiceLifetime = null)
+    private void ValidateChildService(Type serviceType, ServiceLifetime parentLifetime, Type? explicitImplementationType = null, 
+        ServiceLifetime? explicitServiceLifetime = null)
     {
         // This one is, of course, resolvable even though it does not exist in the serviceCollection list.
         if (serviceType == typeof(IServiceProvider))
@@ -149,7 +153,8 @@ public class DependencyValidator
             var explicitMatch = matches.SingleOrDefault(x => x.ImplementationType == explicitImplementationType);
             if (explicitMatch is null)
             {
-                FailedValidations.Add(new FailedValidation(Severity.Error, serviceType, $"{serviceType} does not match required implementation type {explicitImplementationType}"));
+                FailedValidations.Add(new FailedValidation(Severity.Error, serviceType, 
+                    $"{serviceType} does not match required implementation type {explicitImplementationType}"));
             }
         }
 
@@ -160,7 +165,8 @@ public class DependencyValidator
 
             if (explicitServiceLifetime is not null && match.Lifetime != explicitServiceLifetime)
             {
-                FailedValidations.Add(new FailedValidation(Severity.Error, serviceType, $"Service is implemented with {match.Lifetime:G} service lifetime, but is required to have {explicitServiceLifetime:G} service lifetime."));
+                FailedValidations.Add(new FailedValidation(Severity.Error, serviceType, 
+                    $"Service is implemented with {match.Lifetime:G} service lifetime, but is required to have {explicitServiceLifetime:G} service lifetime."));
             }
         }
     }
@@ -177,7 +183,8 @@ public class DependencyValidator
         {
             case ServiceLifetime.Singleton when child is ServiceLifetime.Scoped or ServiceLifetime.Transient:
             case ServiceLifetime.Scoped when child is ServiceLifetime.Transient:
-                FailedValidations.Add(new FailedValidation(Severity.Warning, serviceType, $"Service is implemented with {child:G} service lifetime, but the parent has {parent:G} service lifetime."));
+                FailedValidations.Add(new FailedValidation(Severity.Warning, serviceType, 
+                    $"Service is implemented with {child:G} service lifetime, but the parent has {parent:G} service lifetime."));
                 break;
         }
     }
