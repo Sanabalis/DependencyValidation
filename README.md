@@ -10,7 +10,7 @@ Supports:
 - - Singleton implementation should not depend on Scoped or Transient dependencies
 - - Scoped implementation should not depend on Transient dependencies
 - Scanning assemblies for Controllers
-- For controllers, it validates both constructor injected dependencies and endpoint injected dependencies
+- - It validates both constructor injected dependencies and endpoint injected dependencies
 - Supports several different manual (explicit) checks
 
 Just open the Tests project and look at DependencyTests to see how to use it.
