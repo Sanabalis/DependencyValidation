@@ -25,7 +25,8 @@ public class DependencyTests
                 // Validate entire collection (but this does not validate controllers)
                 dependencyValidator.ValidateServiceCollection();
                 
-                // Scan an assembly and validate all controllers, both the constructor injected dependencies and dependencies injected into endpoints marked with FromService attribute
+                // Scan an assembly and validate all controllers, both the constructor injected dependencies and dependencies injected into endpoints 
+                // marked with FromService attribute
                 dependencyValidator.ValidateControllers(typeof(IApiMarker).Assembly);
 
                 // Different way to validate some classes manually:
@@ -35,7 +36,8 @@ public class DependencyTests
                 // This checks that IDiagnostics is registered, not caring what the implementation is, but checking that it is registered as Singleton 
                 dependencyValidator.ValidateService(typeof(IDiagnostics), ServiceLifetime.Singleton);
 
-                // This checks that ILoggerProvider is implemented with ConsoleLoggerProvider, even if ILoggerProvider has registered other implementations (such as DebugLoggerProvider)
+                // This checks that ILoggerProvider is implemented with ConsoleLoggerProvider, even if ILoggerProvider has registered other implementations 
+                // (such as DebugLoggerProvider)
                 dependencyValidator.ValidateService(typeof(ILoggerProvider), typeof(ConsoleLoggerProvider));
 
                 // This checks that IWeatherService is registered, that Implementation is WeatherService and that it's registered with Scoped service lifetime
